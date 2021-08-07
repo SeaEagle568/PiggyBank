@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/SeaEagle568/Piggy-Banks/Microservices/AuthService/internal/auth"
+	"github.com/SeaEagle568/Piggy-Banks/microservices/AuthService/internal/auth"
 	"github.com/sirupsen/logrus"
 	"github.com/subosito/gotenv"
 	"google.golang.org/grpc"

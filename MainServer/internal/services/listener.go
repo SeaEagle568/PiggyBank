@@ -2,7 +2,7 @@ package services
 
 import (
 	"context"
-	"github.com/SeaEagle568/Piggy-Banks/APIserver/internal/services/rpc"
+	"github.com/SeaEagle568/Piggy-Banks/MainServer/internal/services/rpc"
 )
 
 type RPCListener struct {

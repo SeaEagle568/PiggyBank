@@ -2,7 +2,7 @@ package services
 
 import (
 	"encoding/json"
-	"github.com/SeaEagle568/Piggy-Banks/APIserver/internal/services/rpc"
+	"github.com/SeaEagle568/Piggy-Banks/MainServer/internal/services/rpc"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"io/ioutil"
@@ -20,7 +20,7 @@ type GoMicroservicesDriver struct {
 }
 
 func (driver *GoMicroservicesDriver) InitMicroservices() {
-	jsonFile, err := os.Open("APIserver/configs/microservices.json")
+	jsonFile, err := os.Open("configs/microservices.json")
 	if err != nil {
 		logrus.Fatalf("Error while reading microservices data: %s", err.Error())
 	}

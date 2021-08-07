@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/SeaEagle568/Piggy-Banks/APIserver/internal/services"
+	"github.com/SeaEagle568/Piggy-Banks/MainServer/internal/services"
 	"github.com/gin-gonic/gin"
 )
 

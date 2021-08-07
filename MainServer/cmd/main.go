@@ -1,9 +1,9 @@
 package main
 
 import (
-	pb "github.com/SeaEagle568/Piggy-Banks/APIserver"
-	"github.com/SeaEagle568/Piggy-Banks/APIserver/internal/handlers"
-	"github.com/SeaEagle568/Piggy-Banks/APIserver/internal/services"
+	pb "github.com/SeaEagle568/Piggy-Banks/MainServer"
+	"github.com/SeaEagle568/Piggy-Banks/MainServer/internal/handlers"
+	"github.com/SeaEagle568/Piggy-Banks/MainServer/internal/services"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"github.com/subosito/gotenv"
@@ -28,7 +28,7 @@ func main() {
 }
 
 func initConfig() error {
-	viper.AddConfigPath("APIserver/configs")
+	viper.AddConfigPath("configs")
 	viper.SetConfigName("config")
 	return viper.ReadInConfig()
 }

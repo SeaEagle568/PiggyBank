@@ -25,7 +25,7 @@ type JsonEvent struct {
 
 func (driver *GoEventsController) InitEvents() {
 
-	jsonFile, err := os.Open("APIserver/configs/events.json")
+	jsonFile, err := os.Open("configs/events.json")
 	if err != nil {
 		logrus.Fatalf("Error while reading events data: %s", err.Error())
 	}

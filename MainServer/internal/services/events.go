@@ -2,7 +2,7 @@ package services
 
 import (
 	"encoding/json"
-	"github.com/SeaEagle568/Piggy-Banks/APIserver/internal/services/events"
+	"github.com/SeaEagle568/Piggy-Banks/MainServer/internal/services/events"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"net/http"
