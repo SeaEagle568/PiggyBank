@@ -1,4 +1,4 @@
-package auth
+package services
 
 import (
 	"context"
@@ -8,7 +8,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/sirupsen/logrus"
 	"net/http"
 	"os"
 )
@@ -31,8 +30,7 @@ type AuthorisationData struct {
 	Client   string `json:"client"`
 }
 
-func (a *AuthHandler) Handle(ctx context.Context, event *RPCEvent) (*RPCEventResult, error) {
-	logrus.Infof("new cock arrived with type: %s, data: %s", event.GetEventType(), event.GetData())
+func (a *AuthHandler) Handle(_ context.Context, event *RPCEvent) (*RPCEventResult, error) {
 	if event.GetEventType() != "AuthEvent" {
 		return nil, fmt.Errorf("you tried to handle %s with AuthService, are you dumb? ", event.GetEventType())
 	}
@@ -89,12 +87,12 @@ func verifyToken(tokenString string) (*jwt.Token, error) {
 func decrypt(key []byte, input string) (output string) {
 	cipherText, err := base64.URLEncoding.DecodeString(input)
 	if err != nil {
-		panic(fmt.Sprint("Error decoding base64: %s", err.Error()))
+		panic(fmt.Sprintf("Error decoding base64: %s", err.Error()))
 	}
 
 	block, err := aes.NewCipher(key)
 	if err != nil {
-		panic(fmt.Sprint("Error generating block: %s", err.Error()))
+		panic(fmt.Sprintf("Error generating block: %s", err.Error()))
 	}
 
 	if len(cipherText) < aes.BlockSize {

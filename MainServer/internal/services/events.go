@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/SeaEagle568/Piggy-Banks/MainServer/internal/services/events"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 	"net/http"
 	"strings"
 )
@@ -49,7 +48,6 @@ func (e Events) AddPBEvent(context *gin.Context, driver EventDriver) (*events.Ad
 	}
 	eventData.Name = authdata.Username
 	event := &events.AddPBEvent{EType: "AddPBEvent", Data: &eventData}
-	logrus.Info(event)
 	return event, nil
 }
 
@@ -62,7 +60,7 @@ func (e Events) AuthEvent(context *gin.Context) (*events.AuthEvent, *EventResult
 	token := strArr[1]
 
 	clientName := context.GetHeader("Client")
-	eventData := &events.AuthEventData{token, clientName}
+	eventData := &events.AuthEventData{JWTToken: token, Client: clientName}
 	event := &events.AuthEvent{EType: "AuthEvent", Data: eventData}
 	return event, nil
 }

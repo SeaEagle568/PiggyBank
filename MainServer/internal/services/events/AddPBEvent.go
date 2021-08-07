@@ -2,7 +2,6 @@ package events
 
 import (
 	"encoding/json"
-	"github.com/sirupsen/logrus"
 )
 
 type AddPBEvent struct {
@@ -23,6 +22,5 @@ func (a *AddPBEvent) GetType() string {
 
 func (a *AddPBEvent) GetData() string {
 	data, _ := json.Marshal(a.Data)
-	logrus.Infof("Data from AddPBEvent:\n%s", data)
 	return string(data)
 }

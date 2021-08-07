@@ -6,7 +6,7 @@ microservices:
   - name: DashService
     address: :8003
   - name: AuthService
-    address: :8004
+    address: :8011
   - name: VotingService
     address: :8005
   - name: NotificationService

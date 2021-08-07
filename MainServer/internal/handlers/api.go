@@ -33,7 +33,7 @@ func (h *Handler) getTransactions(context *gin.Context) {
 func (h *Handler) callEvent(name string, context *gin.Context) {
 	event, result := h.Services.NewEvent(name, context, h.Services.EventDriver)
 	if result != nil {
-		NewErrorResponce(context, result.Code, result.Message)
+		NewErrorResponse(context, result.Code, result.Message)
 		return
 	}
 	answer := h.Services.EventDriver.Call(event)
