@@ -52,7 +52,7 @@ func consoleRead(srv *pb.Server, service *services.Service, ready chan bool) {
 
 		if strings.Compare("reload", text) == 0 {
 			fmt.Print("reloading configs")
-			service.EventController.LoadEvents()
+			service.EventManager.LoadEvents()
 			fmt.Print("...")
 			service.MicroserviceDriver.LoadMicroservices()
 			fmt.Print("...")

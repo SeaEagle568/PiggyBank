@@ -28,6 +28,10 @@ func (g *RPCListener) HandleEvent(event Event) *EventResult {
 	}
 }
 
+func (g *RPCListener) GetRPCClient() rpc.HandlerClient {
+	return g.client
+}
+
 func NewRPCListener(client rpc.HandlerClient) *RPCListener {
 	return &RPCListener{client}
 }
