@@ -1,0 +1,66 @@
+[
+  {
+    "name": "AddPBEvent",
+    "handler": "PBControllerService"
+  },
+  {
+    "name": "GetPBEvent",
+    "handler": "PBControllerService"
+  },
+  {
+    "name": "DeletePBEvent",
+    "handler": "PBControllerService"
+  },
+  {
+    "name": "ChangePBEvent",
+    "handler": "PBControllerService"
+  },
+  {
+    "name": "WithdrawEvent",
+    "handler": "TransactionsService"
+  },
+  {
+    "name": "EnrollmentEvent",
+    "handler": "TransactionsService"
+  },
+  {
+    "name": "GetTransactionsEvent",
+    "handler": "TransactionsService"
+  },
+  {
+    "name": "DashTransactionEvent",
+    "handler": "DashService"
+  },
+  {
+    "name": "GenerateWalletEvent",
+    "handler": "DashService"
+  },
+  {
+    "name": "AuthEvent",
+    "handler": "AuthService"
+  },
+  {
+    "name": "AddVotingEvent",
+    "handler": "VotingService"
+  },
+  {
+    "name": "VoteEvent",
+    "handler": "VotingService"
+  },
+  {
+    "name": "AddClientEvent",
+    "handler": "NotificationService"
+  },
+  {
+    "name": "RemoveClientEvent",
+    "handler": "NotificationService"
+  },
+  {
+    "name": "DistributeVotingEvent",
+    "handler": "NotificationService"
+  },
+  {
+    "name": "DistributeMessageEvent",
+    "handler": "NotificationService"
+  }
+]
