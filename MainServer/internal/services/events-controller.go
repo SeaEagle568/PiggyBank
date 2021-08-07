@@ -29,10 +29,19 @@ func (driver *GoEventsController) InitEvents() {
 	if err != nil {
 		logrus.Fatalf("Error while reading events data: %s", err.Error())
 	}
-	defer jsonFile.Close()
+	defer func(jsonFile *os.File) {
+		err := jsonFile.Close()
+		if err != nil {
+			logrus.Errorf("Error closing JSON: %s", err.Error())
+		}
+	}(jsonFile)
+
 	var events []JsonEvent
 	byteValue, _ := ioutil.ReadAll(jsonFile)
-	json.Unmarshal(byteValue, &events)
+	err = json.Unmarshal(byteValue, &events)
+	if err != nil {
+		panic("Wrong configuration in events.yml")
+	}
 
 	for _, value := range events {
 		driver.NamesList = append(driver.NamesList, value.Name)
@@ -50,10 +59,6 @@ func (driver *GoEventsController) NewEvent(eventType string, data *gin.Context, 
 		return nil, results[1].Interface().(*EventResult)
 	}
 	return results[0].Interface().(Event), nil
-}
-
-func (driver *GoEventsController) NewEmptyEvent(eventType string) Event {
-	panic("implement me")
 }
 
 func (driver *GoEventsController) GetEventTypes() []string {

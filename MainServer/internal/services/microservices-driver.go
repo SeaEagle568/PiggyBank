@@ -24,10 +24,19 @@ func (driver *GoMicroservicesDriver) InitMicroservices() {
 	if err != nil {
 		logrus.Fatalf("Error while reading microservices data: %s", err.Error())
 	}
-	defer jsonFile.Close()
+	defer func(jsonFile *os.File) {
+		err := jsonFile.Close()
+		if err != nil {
+			logrus.Errorf("Error closing JSON: %s", err.Error())
+		}
+	}(jsonFile)
+
 	var microservices []Microservice
 	byteValue, _ := ioutil.ReadAll(jsonFile)
-	json.Unmarshal(byteValue, &microservices)
+	err = json.Unmarshal(byteValue, &microservices)
+	if err != nil {
+		panic("Wrong configuration of microservices.yml")
+	}
 
 	for _, value := range microservices {
 		conn, err := grpc.Dial(value.Address, grpc.WithInsecure())

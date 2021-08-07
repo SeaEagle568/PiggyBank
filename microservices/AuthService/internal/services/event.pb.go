@@ -4,7 +4,7 @@
 // 	protoc        v3.17.3
 // source: proto/event.proto
 
-package auth
+package services
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"

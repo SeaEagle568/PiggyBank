@@ -30,7 +30,6 @@ type EventDriver interface {
 type EventController interface {
 	InitEvents()
 	NewEvent(eventType string, data *gin.Context, edriver EventDriver) (Event, *EventResult)
-	NewEmptyEvent(eventType string) Event
 	GetHandlerByName(name string) string
 	GetEventTypes() []string
 }
