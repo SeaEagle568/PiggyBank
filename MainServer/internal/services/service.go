@@ -17,18 +17,16 @@ type Listener interface {
 }
 
 type MicroserviceDriver interface {
-	InitMicroservices()
+	LoadMicroservices()
 	GetMicroservice(name string) Microservice
 }
 type EventDriver interface {
-	InitEventDriver()
+	LoadEventDriver()
 	Call(event Event) *EventResult
-	RegisterListener(event Event, listener *Listener)
-	UnregisterListener(event Event, listener *Listener)
 }
 
 type EventController interface {
-	InitEvents()
+	LoadEvents()
 	NewEvent(eventType string, data *gin.Context, edriver EventDriver) (Event, *EventResult)
 	GetHandlerByName(name string) string
 	GetEventTypes() []string

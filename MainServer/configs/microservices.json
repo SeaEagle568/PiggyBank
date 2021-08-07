@@ -13,7 +13,7 @@
     },
     {
       "name": "AuthService",
-      "address": ":8004"
+      "address": ":8011"
     },
     {
       "name": "VotingService",

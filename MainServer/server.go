@@ -1,7 +1,8 @@
-package APIserver
+package server
 
 import (
 	"context"
+	"github.com/sirupsen/logrus"
 	"net/http"
 	"time"
 )
@@ -18,7 +19,10 @@ func (s *Server) Run(port string, handler http.Handler) error {
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 	}
-	return s.httpServer.ListenAndServe()
+	if err := s.httpServer.ListenAndServe(); err != http.ErrServerClosed {
+		logrus.Fatalf("ListenAndServe(): %v", err)
+	}
+	return nil
 }
 
 func (s *Server) Shutdown(ctx context.Context) error {

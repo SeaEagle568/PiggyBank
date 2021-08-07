@@ -1,12 +1,10 @@
 package services
 
 import (
-	"encoding/json"
 	"github.com/SeaEagle568/Piggy-Banks/MainServer/internal/services/rpc"
+	"github.com/SeaEagle568/Piggy-Banks/MainServer/internal/services/utils"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
-	"io/ioutil"
-	"os"
 )
 
 type Microservice struct {
@@ -16,36 +14,32 @@ type Microservice struct {
 }
 
 type GoMicroservicesDriver struct {
-	dict map[string]Microservice
+	dict        map[string]Microservice
+	connections []*grpc.ClientConn
 }
 
-func (driver *GoMicroservicesDriver) InitMicroservices() {
-	jsonFile, err := os.Open("configs/microservices.json")
-	if err != nil {
-		logrus.Fatalf("Error while reading microservices data: %s", err.Error())
-	}
-	defer func(jsonFile *os.File) {
-		err := jsonFile.Close()
-		if err != nil {
-			logrus.Errorf("Error closing JSON: %s", err.Error())
-		}
-	}(jsonFile)
-
-	var microservices []Microservice
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-	err = json.Unmarshal(byteValue, &microservices)
-	if err != nil {
-		panic("Wrong configuration of microservices.yml")
-	}
-
+func (driver *GoMicroservicesDriver) LoadMicroservices() {
+	driver.close()
+	microservices := utils.GetMicroservices()
 	for _, value := range microservices {
 		conn, err := grpc.Dial(value.Address, grpc.WithInsecure())
+		driver.connections = append(driver.connections, conn)
 		if err != nil {
 			logrus.Fatalf("Error while trying to dial with microservice %s on address %s : %s", value.Name, value.Address, err.Error())
 		}
 		value.RPCClient = rpc.NewHandlerClient(conn)
-		driver.dict[value.Name] = value
+		driver.dict[value.Name] = Microservice(value)
 	}
+}
+
+func (driver *GoMicroservicesDriver) close() {
+	for _, val := range driver.connections {
+		err := val.Close()
+		if err != nil {
+			logrus.Errorf("Unable to close service connction: %s", err.Error())
+		}
+	}
+	driver.connections = make([]*grpc.ClientConn, 0)
 }
 
 func (driver *GoMicroservicesDriver) GetMicroservice(name string) Microservice {
@@ -55,7 +49,8 @@ func (driver *GoMicroservicesDriver) GetMicroservice(name string) Microservice {
 func NewGoMicroservicesDriver() *GoMicroservicesDriver {
 	res := &GoMicroservicesDriver{
 		make(map[string]Microservice),
+		make([]*grpc.ClientConn, 0),
 	}
-	res.InitMicroservices()
+	res.LoadMicroservices()
 	return res
 }
