@@ -1,16 +1,16 @@
 package handlers
 
 import (
-	"github.com/SeaEagle568/Piggy-Banks/internal/services"
+	"github.com/SeaEagle568/Piggy-Banks/APIserver/internal/services"
 	"github.com/gin-gonic/gin"
 )
 
 type Handler struct {
-	services *services.Service
+	Services *services.Service
 }
 
 func NewHandler(services *services.Service) *Handler {
-	return &Handler{services: services}
+	return &Handler{Services: services}
 }
 
 func (h Handler) InitRoutes() *gin.Engine {

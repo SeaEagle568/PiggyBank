@@ -2,16 +2,17 @@ package services
 
 import (
 	"encoding/json"
+	"github.com/SeaEagle568/Piggy-Banks/APIserver/internal/services/rpc"
+	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"io/ioutil"
-	"log"
 	"os"
 )
 
 type Microservice struct {
 	Name      string `json:"name"`
 	Address   string `json:"address"`
-	RPCClient HandlerClient
+	RPCClient rpc.HandlerClient
 }
 
 type GoMicroservicesDriver struct {
@@ -19,9 +20,9 @@ type GoMicroservicesDriver struct {
 }
 
 func (driver *GoMicroservicesDriver) InitMicroservices() {
-	jsonFile, err := os.Open("configs/microservices.json")
+	jsonFile, err := os.Open("APIserver/configs/microservices.json")
 	if err != nil {
-		log.Fatalf("Error while reading microservices data: %s", err.Error())
+		logrus.Fatalf("Error while reading microservices data: %s", err.Error())
 	}
 	defer jsonFile.Close()
 	var microservices []Microservice
@@ -31,11 +32,10 @@ func (driver *GoMicroservicesDriver) InitMicroservices() {
 	for _, value := range microservices {
 		conn, err := grpc.Dial(value.Address, grpc.WithInsecure())
 		if err != nil {
-			log.Fatalf("Error while trying to dial with microservice %s on address %s : %s", value.Name, value.Address, err.Error())
+			logrus.Fatalf("Error while trying to dial with microservice %s on address %s : %s", value.Name, value.Address, err.Error())
 		}
-		value.RPCClient = NewHandlerClient(conn)
+		value.RPCClient = rpc.NewHandlerClient(conn)
 		driver.dict[value.Name] = value
-		conn.Close()
 	}
 }
 

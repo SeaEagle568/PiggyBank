@@ -2,14 +2,18 @@ package services
 
 import "github.com/gin-gonic/gin"
 
-type Event struct {
-	eventType string
-	data      string
-	result    string
+type Event interface {
+	GetType() string
+	GetData() string
+}
+
+type EventResult struct {
+	Code    int
+	Message string
 }
 
 type Listener interface {
-	HandleEvent(event *Event) error
+	HandleEvent(event Event) *EventResult
 }
 
 type MicroserviceDriver interface {
@@ -18,31 +22,31 @@ type MicroserviceDriver interface {
 }
 type EventDriver interface {
 	InitEventDriver()
-	Call(event *Event) string
-	RegisterListener(event *Event, listener *Listener)
-	UnregisterListener(event *Event, listener *Listener)
+	Call(event Event) *EventResult
+	RegisterListener(event Event, listener *Listener)
+	UnregisterListener(event Event, listener *Listener)
 }
 
-type Events interface {
+type EventController interface {
 	InitEvents()
-	NewEvent(eventType string, data *gin.Context) *Event
-	NewEmptyEvent(eventType string) *Event
+	NewEvent(eventType string, data *gin.Context, edriver EventDriver) (Event, *EventResult)
+	NewEmptyEvent(eventType string) Event
 	GetHandlerByName(name string) string
 	GetEventTypes() []string
 }
 
 type Service struct {
-	Events
+	EventController
 	MicroserviceDriver
 	EventDriver
 }
 
 func NewService() *Service {
-	events := NewGoEvents()
+	events := NewGoEventsController()
 	microservices := NewGoMicroservicesDriver()
 	eventDriver := NewGoEventDriver(microservices, events)
 	return &Service{
-		Events:             events,
+		EventController:    events,
 		MicroserviceDriver: microservices,
 		EventDriver:        eventDriver,
 	}

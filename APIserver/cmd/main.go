@@ -1,9 +1,9 @@
 package main
 
 import (
-	pb "github.com/SeaEagle568/Piggy-Banks"
-	"github.com/SeaEagle568/Piggy-Banks/internal/handlers"
-	"github.com/SeaEagle568/Piggy-Banks/internal/services"
+	pb "github.com/SeaEagle568/Piggy-Banks/APIserver"
+	"github.com/SeaEagle568/Piggy-Banks/APIserver/internal/handlers"
+	"github.com/SeaEagle568/Piggy-Banks/APIserver/internal/services"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"github.com/subosito/gotenv"
@@ -14,7 +14,6 @@ func main() {
 	if err := initConfig(); err != nil {
 		logrus.Fatalf("error occured while initializing config: %s", err.Error())
 	}
-
 	if err := gotenv.Load(); err != nil {
 		logrus.Fatalf("error occured while initializing enviromental variables: %s", err.Error())
 	}
@@ -29,7 +28,7 @@ func main() {
 }
 
 func initConfig() error {
-	viper.AddConfigPath("configs")
+	viper.AddConfigPath("APIserver/configs")
 	viper.SetConfigName("config")
 	return viper.ReadInConfig()
 }

@@ -3,7 +3,7 @@ package services
 type GoEventDriver struct {
 	listeners     map[string]Listener
 	microservices MicroserviceDriver
-	events        Events
+	events        EventController
 }
 
 func (g *GoEventDriver) InitEventDriver() {
@@ -13,19 +13,20 @@ func (g *GoEventDriver) InitEventDriver() {
 	}
 }
 
-func (g *GoEventDriver) Call(event *Event) string {
+func (g *GoEventDriver) Call(event Event) *EventResult {
+	result := g.listeners[event.GetType()].HandleEvent(event)
+	return result
+}
+
+func (g *GoEventDriver) RegisterListener(event Event, listener *Listener) {
 	panic("implement me")
 }
 
-func (g *GoEventDriver) RegisterListener(event *Event, listener *Listener) {
+func (g *GoEventDriver) UnregisterListener(event Event, listener *Listener) {
 	panic("implement me")
 }
 
-func (g *GoEventDriver) UnregisterListener(event *Event, listener *Listener) {
-	panic("implement me")
-}
-
-func NewGoEventDriver(driver MicroserviceDriver, events Events) *GoEventDriver {
+func NewGoEventDriver(driver MicroserviceDriver, events EventController) *GoEventDriver {
 	ged := &GoEventDriver{
 		listeners:     make(map[string]Listener),
 		microservices: driver,
