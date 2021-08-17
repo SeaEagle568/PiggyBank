@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package services;
+option java_multiple_files = true;
+service Handler {
+  rpc Handle(RPCEvent) returns (RPCEventResult) {}
+}
+
+message RPCEvent {
+  string eventType = 1;
+  string data = 2;
+}
+message RPCEventResult {
+  int32 code = 1;
+  string message = 2;
+}
