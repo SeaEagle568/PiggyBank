@@ -1,0 +1,26 @@
+[
+    {
+      "name": "PBControllerService",
+      "address": ":8001"
+    },
+    {
+      "name": "TransactionsService",
+      "address": ":8002"
+    },
+    {
+      "name": "DashService",
+      "address": ":8003"
+    },
+    {
+      "name": "AuthService",
+      "address": ":8011"
+    },
+    {
+      "name": "VotingService",
+      "address": ":8005"
+    },
+    {
+      "name": "NotificationService",
+      "address": ":8006"
+    }
+]
