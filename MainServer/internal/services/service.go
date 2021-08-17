@@ -1,6 +1,10 @@
 package services
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/SeaEagle568/Piggy-Banks/MainServer/internal/services/event_controllers"
+	"github.com/SeaEagle568/Piggy-Banks/MainServer/internal/services/rpc"
+	"github.com/gin-gonic/gin"
+)
 
 type Event interface {
 	GetType() string
@@ -14,6 +18,7 @@ type EventResult struct {
 
 type Listener interface {
 	HandleEvent(event Event) *EventResult
+	GetRPCClient() rpc.HandlerClient
 }
 
 type MicroserviceDriver interface {
@@ -23,9 +28,10 @@ type MicroserviceDriver interface {
 type EventDriver interface {
 	LoadEventDriver()
 	Call(event Event) *EventResult
+	DirectCall(event *rpc.RPCEvent) *rpc.RPCEventResult
 }
 
-type EventController interface {
+type EventManager interface {
 	LoadEvents()
 	NewEvent(eventType string, data *gin.Context, edriver EventDriver) (Event, *EventResult)
 	GetHandlerByName(name string) string
@@ -33,17 +39,17 @@ type EventController interface {
 }
 
 type Service struct {
-	EventController
+	EventManager
 	MicroserviceDriver
 	EventDriver
 }
 
 func NewService() *Service {
-	events := NewGoEventsController()
+	events := event_controllers.NewGoEventsController()
 	microservices := NewGoMicroservicesDriver()
-	eventDriver := NewGoEventDriver(microservices, events)
+	eventDriver := event_controllers.NewGoEventDriver(microservices, events)
 	return &Service{
-		EventController:    events,
+		EventManager:       events,
 		MicroserviceDriver: microservices,
 		EventDriver:        eventDriver,
 	}

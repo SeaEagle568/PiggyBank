@@ -1,7 +1,8 @@
-package services
+package event_controllers
 
 import (
 	"encoding/json"
+	"github.com/SeaEagle568/Piggy-Banks/MainServer/internal/services"
 	"github.com/SeaEagle568/Piggy-Banks/MainServer/internal/services/events"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -17,12 +18,12 @@ type AuthorisationData struct {
 	Client   string `json:"client"`
 }
 
-func getAuthInfo(ctx *gin.Context, driver EventDriver) (data *AuthorisationData, eventResult *EventResult) {
+func getAuthInfo(ctx *gin.Context, driver services.EventDriver) (data *AuthorisationData, eventResult *services.EventResult) {
 	event, result := Events{}.AuthEvent(ctx)
 	if result != nil {
 		return nil, result
 	}
-	answer := EventDriver.Call(driver, event)
+	answer := services.EventDriver.Call(driver, event)
 	if answer.Code != 200 {
 		return nil, answer
 	}
@@ -30,16 +31,16 @@ func getAuthInfo(ctx *gin.Context, driver EventDriver) (data *AuthorisationData,
 	err := json.Unmarshal([]byte(answer.Message), &temp)
 	data = &temp
 	if err != nil {
-		return nil, &EventResult{http.StatusInternalServerError, "Authentication server error: " + err.Error()}
+		return nil, &services.EventResult{http.StatusInternalServerError, "Authentication server error: " + err.Error()}
 	}
 	return data, nil
 }
 
-func (e Events) AddPBEvent(context *gin.Context, driver EventDriver) (*events.AddPBEvent, *EventResult) {
+func (e Events) AddPBEvent(context *gin.Context, driver services.EventDriver) (*events.AddPBEvent, *services.EventResult) {
 	var eventData events.AddPBEventData
 	err := context.BindJSON(&eventData)
 	if err != nil {
-		return nil, &EventResult{http.StatusBadRequest, "Error occurred while trying to parse request JSON"}
+		return nil, &services.EventResult{http.StatusBadRequest, "Error occurred while trying to parse request JSON"}
 	}
 
 	authdata, result := getAuthInfo(context, driver)
@@ -51,11 +52,11 @@ func (e Events) AddPBEvent(context *gin.Context, driver EventDriver) (*events.Ad
 	return event, nil
 }
 
-func (e Events) AuthEvent(context *gin.Context) (*events.AuthEvent, *EventResult) {
+func (e Events) AuthEvent(context *gin.Context) (*events.AuthEvent, *services.EventResult) {
 	bearToken := context.GetHeader("Authorization")
 	strArr := strings.Split(bearToken, " ")
 	if len(strArr) != 2 {
-		return nil, &EventResult{http.StatusUnauthorized, "Invalid token format"}
+		return nil, &services.EventResult{http.StatusUnauthorized, "Invalid token format"}
 	}
 	token := strArr[1]
 

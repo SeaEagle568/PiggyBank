@@ -1,6 +1,7 @@
-package services
+package event_controllers
 
 import (
+	"github.com/SeaEagle568/Piggy-Banks/MainServer/internal/services"
 	"github.com/SeaEagle568/Piggy-Banks/MainServer/internal/services/utils"
 	"github.com/gin-gonic/gin"
 	"reflect"
@@ -23,16 +24,16 @@ func (driver *GoEventsController) LoadEvents() {
 	}
 }
 
-func (driver *GoEventsController) NewEvent(eventType string, data *gin.Context, edriver EventDriver) (Event, *EventResult) {
+func (driver *GoEventsController) NewEvent(eventType string, data *gin.Context, edriver services.EventDriver) (services.Event, *services.EventResult) {
 	var events Events
 	inputs := make([]reflect.Value, 2)
 	inputs[0] = reflect.ValueOf(data)
 	inputs[1] = reflect.ValueOf(edriver)
 	results := reflect.ValueOf(&events).MethodByName(eventType).Call(inputs)
 	if !results[1].IsNil() {
-		return nil, results[1].Interface().(*EventResult)
+		return nil, results[1].Interface().(*services.EventResult)
 	}
-	return results[0].Interface().(Event), nil
+	return results[0].Interface().(services.Event), nil
 }
 
 func (driver *GoEventsController) GetEventTypes() []string {

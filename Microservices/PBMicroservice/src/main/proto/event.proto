@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package services;
-option go_package = "github.com/SeaEagle568/Piggy-Banks/services";
+option java_multiple_files = true;
 service Handler {
   rpc Handle(RPCEvent) returns (RPCEventResult) {}
 }

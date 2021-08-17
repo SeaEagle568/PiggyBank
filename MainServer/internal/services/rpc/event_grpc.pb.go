@@ -43,7 +43,7 @@ func (c *handlerClient) Handle(ctx context.Context, in *RPCEvent, opts ...grpc.C
 // for forward compatibility
 type HandlerServer interface {
 	Handle(context.Context, *RPCEvent) (*RPCEventResult, error)
-	mustEmbedUnimplementedHandlerServer()
+	MustEmbedUnimplementedHandlerServer()
 }
 
 // UnimplementedHandlerServer must be embedded to have forward compatible implementations.
@@ -53,7 +53,7 @@ type UnimplementedHandlerServer struct {
 func (UnimplementedHandlerServer) Handle(context.Context, *RPCEvent) (*RPCEventResult, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Handle not implemented")
 }
-func (UnimplementedHandlerServer) mustEmbedUnimplementedHandlerServer() {}
+func (UnimplementedHandlerServer) MustEmbedUnimplementedHandlerServer() {}
 
 // UnsafeHandlerServer may be embedded to opt out of forward compatibility for this services.
 // Use of this interface is not recommended, as added methods to HandlerServer will
