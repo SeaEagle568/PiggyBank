@@ -10,18 +10,22 @@ import lombok.Getter;
 public class AddPBEvent implements Event{
     @JsonProperty(value = "eventType")
     @Getter
-    private String eventName;
+    private final String eventName;
 
     @JsonProperty(value = "data")
     @Getter
-    private EventData data;
+    private final EventData data;
 
-    private AddPBEvent() {}
+    private AddPBEvent(String name, EventData data) {
+        this.data = data;
+        this.eventName = name;
+    }
 
     public static final class Builder implements EventBuilder{
         public AddPBEvent buildFromJson(String json) throws JsonProcessingException {
             ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readValue(json, AddPBEvent.class);
+            EventData data = objectMapper.readValue(json, AddPBEvent.EventData.class);
+            return new AddPBEvent("AddPBEvent", data);
         }
     }
 

@@ -9,7 +9,7 @@ public class AddHandler implements Handler{
 
     @Override
     public HandlingResult handle(Event event) {
-        if (!(event instanceof AddPBEvent)) return new HandlingResult(500, "AddPBEvent cannot parse " + event.getEventName());
+        if (!(event instanceof AddPBEvent)) return new HandlingResult(500, "AddHandler cannot parse " + event.getEventName());
         return new HandlingResult(200, "ID");
     }
 }
