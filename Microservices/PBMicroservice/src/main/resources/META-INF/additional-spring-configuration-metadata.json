@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "microservice.port",
+      "type": "java.lang.Integer",
+      "description": "Web port for microservice."
+  }
+] }
